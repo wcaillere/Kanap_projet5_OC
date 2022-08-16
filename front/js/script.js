@@ -1,0 +1,23 @@
+const url = "http://localhost:3000/api/products";
+
+fetch(url)
+    .then(function(data) {
+        if (data.ok) {
+            return data.json();
+        }
+    })
+    .then(function(productList) {
+        // console.log(productList);
+        for (let product of productList) {
+            document.querySelector('#items').innerHTML += `<a href="./product.html?id=42">
+            <article>
+              <img src=${product.imageUrl} alt=${product.altTxt}>
+              <h3 class="productName">${product.name}</h3>
+              <p class="productDescription">${product.description}</p>
+            </article>
+          </a>`;
+        }
+    })
+    .catch(function(err) {
+        console.log(err);
+    });

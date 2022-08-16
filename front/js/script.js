@@ -7,9 +7,9 @@ fetch(url)
         }
     })
     .then(function(productList) {
-        // console.log(productList);
+        console.log(productList);
         for (let product of productList) {
-            document.querySelector('#items').innerHTML += `<a href="./product.html?id=42">
+            document.querySelector('#items').innerHTML += `<a href="./product.html?id=${product._id}">
             <article>
               <img src=${product.imageUrl} alt=${product.altTxt}>
               <h3 class="productName">${product.name}</h3>

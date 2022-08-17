@@ -9,6 +9,7 @@ fetch(`http://localhost:3000/api/products/${id}`)
     })
     .then(function(product) {
         console.log(product);
+        document.querySelector('.item__img').innerHTML = `<img src=${product.imageUrl} alt=${product.altTxt}>`
     })
     .catch(function(err) {
         console.log(err);

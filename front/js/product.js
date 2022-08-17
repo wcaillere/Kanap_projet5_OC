@@ -23,10 +23,18 @@ fetch(`http://localhost:3000/api/products/${id}`)
         console.log(err);
     });
 
+/**
+ * Save the new cart in the localStorage
+ * @param {Array} cart 
+ */
 function saveCart(cart) {
     localStorage.setItem('cart', JSON.stringify(cart));
 }
 
+/**
+ * Get the actual cart which was in the localStorage
+ * @returns {Array}
+ */
 function getCart() {
     let cart = localStorage.getItem('cart');
     if (cart == null) {
@@ -37,7 +45,7 @@ function getCart() {
 }
 
 /**
- * 
+ * get the command and push it in the cart saved in the localStorage
  */
 function addCart() {
     let color = document.querySelector('#colors').value;

@@ -1,6 +1,8 @@
+//get product's id after visitor comes from the homepage
 let url = new URL(window.location.href);
 var id = url.searchParams.get('id');
 
+//show product on the page via API request
 fetch(`http://localhost:3000/api/products/${id}`)
     .then(function(data) {
         if (data.ok) {
@@ -21,15 +23,35 @@ fetch(`http://localhost:3000/api/products/${id}`)
         console.log(err);
     });
 
+function saveCart(cart) {
+    localStorage.setItem('cart', JSON.stringify(cart));
+}
+
+function getCart() {
+    let cart = localStorage.getItem('cart');
+    if (cart == null) {
+        return [];
+    } else {
+        return JSON.parse(cart);
+    }
+}
+
 /**
  * 
  */
 function addCart() {
     let color = document.querySelector('#colors').value;
-    let quantity = document.querySelector('#quantity').value;
+    let quantity = Number(document.querySelector('#quantity').value);
     if (color && quantity != 0) {
-        let command = [id, color, quantity];
-        localStorage.setItem([id, color], command);
+        let command = {"id": id, "color": color, "quantity": quantity};
+        let cart = getCart();
+        let foundProduct = cart.find(product => product.id == command.id && product.color == command.color);
+        if (foundProduct != undefined) {
+            foundProduct.quantity += command.quantity;
+        } else {
+            cart.push(command);
+        }
+        saveCart(cart);
     }
 };
 

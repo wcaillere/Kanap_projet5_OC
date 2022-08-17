@@ -1,5 +1,5 @@
 let url = new URL(window.location.href);
-let id = url.searchParams.get('id');
+var id = url.searchParams.get('id');
 
 fetch(`http://localhost:3000/api/products/${id}`)
     .then(function(data) {
@@ -20,3 +20,17 @@ fetch(`http://localhost:3000/api/products/${id}`)
     .catch(function(err) {
         console.log(err);
     });
+
+/**
+ * 
+ */
+function addCart() {
+    let color = document.querySelector('#colors').value;
+    let quantity = document.querySelector('#quantity').value;
+    if (color && quantity != 0) {
+        let command = [id, color, quantity];
+        localStorage.setItem([id, color], command);
+    }
+};
+
+document.querySelector('#addToCart').addEventListener('click', addCart);

@@ -3,6 +3,27 @@ let cartList = JSON.parse(localStorage.getItem('cart'));
 // console.log(cartList);
 
 /**
+ * Save the new cart in the localStorage
+ * @param {Array} cart 
+ */
+ function saveCart(cart) {
+  localStorage.setItem('cart', JSON.stringify(cart));
+}
+
+/**
+* Get the actual cart which was in the localStorage
+* @returns {Array}
+*/
+function getCart() {
+  let cart = localStorage.getItem('cart');
+  if (cart == null) {
+      return [];
+  } else {
+      return JSON.parse(cart);
+  }
+}
+
+/**
  * Show the cart on the cart page
  */
 function showCart () {

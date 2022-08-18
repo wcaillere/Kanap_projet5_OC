@@ -1,5 +1,6 @@
 const url = "http://localhost:3000/api/products";
 
+//show products on the page via API request
 fetch(url)
     .then(function(data) {
         if (data.ok) {

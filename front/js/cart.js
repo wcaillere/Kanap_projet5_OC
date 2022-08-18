@@ -72,5 +72,26 @@ function getTotalQuantity() {
   document.querySelector('#totalQuantity').textContent = quantity;
 }
 
+function getTotalPrice() {
+  let cart = getCart();
+  let totalPrice = 0;
+  for (let item of cart) {
+    fetch(`http://localhost:3000/api/products/${item.id}`)
+    .then(function(data) {
+        if (data.ok) {
+            return data.json();
+        }
+    })
+    .then(function(product) {
+      totalPrice += product.price*item.quantity;
+      document.querySelector('#totalPrice').textContent = totalPrice;
+    })
+    .catch(function(err) {
+        console.log(err);
+    });
+  }
+}
+
 showCart();
 getTotalQuantity();
+getTotalPrice();

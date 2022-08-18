@@ -92,9 +92,12 @@ function showCart () {
             </div>
           </div>
         </article>`
-        document.querySelector('.deleteItem').addEventListener('click', (e) => {
+        removeBtn = document.querySelectorAll('.deleteItem');
+        for (let element of removeBtn) {
+          addEventListener('click', (e) => {
           removeFromCart(e);
-        })
+          })
+        }
       })
       .catch(function(err) {
           console.log(err);

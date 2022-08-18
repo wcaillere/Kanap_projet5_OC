@@ -50,7 +50,7 @@ function getCart() {
 function addCart() {
     let color = document.querySelector('#colors').value;
     let quantity = Number(document.querySelector('#quantity').value);
-    if (color && quantity != 0) {
+    if (color && quantity > 0) {
         let command = {"id": id, "color": color, "quantity": quantity};
         let cart = getCart();
         let foundProduct = cart.find(product => product.id == command.id && product.color == command.color);
@@ -60,6 +60,9 @@ function addCart() {
             cart.push(command);
         }
         saveCart(cart);
+        alert("Votre produit a bien été ajouté à votre panier !")
+    } else {
+        alert("Veuillez sélectionner une couleur valide ainsi qu'une quantité supérieure à 0.")
     }
 };
 

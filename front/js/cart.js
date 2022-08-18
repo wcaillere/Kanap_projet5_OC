@@ -63,4 +63,14 @@ function showCart () {
   }
 };
 
+function getTotalQuantity() {
+  let cart = getCart();
+  let quantity = 0;
+  for (let product of cart) {
+    quantity += product.quantity;
+  }
+  document.querySelector('#totalQuantity').textContent = quantity;
+}
+
 showCart();
+getTotalQuantity();

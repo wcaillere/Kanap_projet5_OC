@@ -19,6 +19,9 @@ function getCart() {
   }
 }
 
+/**
+ * Get the total quantity of products in the cart
+ */
 function getTotalQuantity() {
   let cart = getCart();
   let quantity = 0;
@@ -28,6 +31,9 @@ function getTotalQuantity() {
   document.querySelector('#totalQuantity').textContent = quantity;
 }
 
+/**
+ * Get the total price of the cart (price of each product asked via API, this information is not in the cart)
+ */
 function getTotalPrice() {
   let cart = getCart();
   let totalPrice = 0;
@@ -48,6 +54,10 @@ function getTotalPrice() {
   }
 }
 
+/**
+ * Remove from the cart the parent product of the element put in argument (here it is a button 'supprimer'). Total price and quantity are recalculated at the end
+ * @param {HTMLElement} element 
+ */
 function removeFromCart(element) {
   let productToRemove = element.target.closest('.cart__item')
   let cart = getCart()
@@ -58,6 +68,10 @@ function removeFromCart(element) {
   getTotalQuantity();
 }
 
+/**
+ * Change the quantity of the parent product of the element put in argument (here it is a input 'value'). Total price and quantity are recalculated at the end
+ * @param {HTMLElement} element 
+ */
 function changeQuantity(element) {
   let newQuantity = Number(element.target.value);
   let cart = getCart();

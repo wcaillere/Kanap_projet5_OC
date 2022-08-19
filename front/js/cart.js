@@ -89,9 +89,9 @@ function changeQuantity(element) {
 }
 
 /**
- * Show the cart on the cart page
+ * Display the cart on the cart page
  */
-function showCart () {
+function displayCart () {
   let cartList = JSON.parse(localStorage.getItem('cart'));
   for (let item of cartList) {
       fetch(`http://localhost:3000/api/products/${item.id}`)
@@ -145,4 +145,23 @@ function showCart () {
   getTotalPrice();
 };
 
-showCart();
+displayCart();
+
+document.querySelector('#order').addEventListener('click', (e) => {
+  //prevent display of the default invalid input's message
+  e.preventDefault();
+  for (let input of document.querySelectorAll('form input[type=text]')) {
+    if (input.checkValidity()) {
+      input.nextElementSibling.textContent = '';
+    } else {
+      input.nextElementSibling.textContent = 'Veuillez remplir ce champ';
+    }
+  }
+
+  let email = document.querySelector('form input[type=email]')
+  if (email.checkValidity()) {
+    email.nextElementSibling.textContent = '';
+  } else {
+    email.nextElementSibling.textContent = 'Veuillez renseignez une adresse mail valide';
+  }
+})

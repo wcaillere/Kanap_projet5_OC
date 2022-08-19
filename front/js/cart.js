@@ -60,19 +60,18 @@ function removeFromCart(element) {
 
 function changeQuantity(element) {
   let newQuantity = Number(element.target.value);
+  let cart = getCart();
+  let productToChange = element.target.closest('.cart__item');
+  findProduct = cart.find(p => p.id == productToChange.dataset.id || p.color == productToChange.dataset.color);
   if (newQuantity > 0 && newQuantity < 101) {
-    let cart = getCart();
-    let productToChange = element.target.closest('.cart__item');
-    findProduct = cart.find(p => p.id == productToChange.dataset.id || p.color == productToChange.dataset.color)
     findProduct.quantity = newQuantity;
     saveCart(cart);
-    getTotalPrice();
-    getTotalQuantity();
   } else {
     alert('veuillez indiquer une valeur valide (entre 1 et 100)')
-    element.target.value = 1;
+    element.target.value = findProduct.quantity;
   }
-  
+  getTotalPrice();
+  getTotalQuantity();
 }
 
 /**
@@ -117,11 +116,12 @@ function showCart () {
           })
         }
 
-        
-        document.querySelector('.itemQuantity').addEventListener('change', (e) => {
-          changeQuantity(e);
-        })
-
+        productsQuantities = document.querySelectorAll('.itemQuantity');
+        for (let productQuantity of productsQuantities) {
+          productQuantity.addEventListener('change', (e) => {
+            changeQuantity(e);
+          })
+        }
       })
       .catch(function(err) {
           console.log(err);

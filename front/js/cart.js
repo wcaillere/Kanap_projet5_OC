@@ -49,13 +49,30 @@ function getTotalPrice() {
 }
 
 function removeFromCart(element) {
-  elementToRemove = element.target.closest('.cart__item')
+  let productToRemove = element.target.closest('.cart__item')
   let cart = getCart()
-  cart = cart.filter(p => p.id != elementToRemove.dataset.id || p.color != elementToRemove.dataset.color);
+  cart = cart.filter(p => p.id != productToRemove.dataset.id || p.color != productToRemove.dataset.color);
   saveCart(cart);
-  elementToRemove.remove();
+  productToRemove.remove();
   getTotalPrice();
   getTotalQuantity();
+}
+
+function changeQuantity(element) {
+  let newQuantity = Number(element.target.value);
+  if (newQuantity > 0 && newQuantity < 101) {
+    let cart = getCart();
+    let productToChange = element.target.closest('.cart__item');
+    findProduct = cart.find(p => p.id == productToChange.dataset.id || p.color == productToChange.dataset.color)
+    findProduct.quantity = newQuantity;
+    saveCart(cart);
+    getTotalPrice();
+    getTotalQuantity();
+  } else {
+    alert('veuillez indiquer une valeur valide (entre 1 et 100)')
+    element.target.value = 1;
+  }
+  
 }
 
 /**
@@ -92,12 +109,19 @@ function showCart () {
             </div>
           </div>
         </article>`
+
         removeBtn = document.querySelectorAll('.deleteItem');
         for (let element of removeBtn) {
-          addEventListener('click', (e) => {
+          element.addEventListener('click', (e) => {
           removeFromCart(e);
           })
         }
+
+        
+        document.querySelector('.itemQuantity').addEventListener('change', (e) => {
+          changeQuantity(e);
+        })
+
       })
       .catch(function(err) {
           console.log(err);

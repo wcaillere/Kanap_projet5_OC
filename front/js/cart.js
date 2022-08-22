@@ -145,9 +145,14 @@ function displayCart () {
   getTotalPrice();
 };
 
-displayCart();
-
+/**
+ * Check if an input is empty or not for the POST of the form
+ * @param {HTMLElement} input 
+ * @param {string} errorMessage Allow to personalize the error message
+ * @returns true if the input is valid (not empty)
+ */
 function checkEmptyInput(input, errorMessage) {
+  //Using the property 'trim' takes into account string containing only spaces
   if (input.value.trim().length != 0) {
     input.nextElementSibling.textContent = '';
     return true
@@ -157,6 +162,11 @@ function checkEmptyInput(input, errorMessage) {
   };
 }
 
+/**
+ * Check if an input has number or not in it for the POST of the form
+ * @param {HTMLElement} input 
+ * @param {string} errorMessage Allow to personalize the error message
+ */
 function checkNumber(input, errorMessage) {
   if (/[0-9]+/.test(input.value)) {
     input.nextElementSibling.textContent = errorMessage;
@@ -165,10 +175,14 @@ function checkNumber(input, errorMessage) {
   };
 }
 
+//Display the cart on the html page on its load
+displayCart();
+
 document.querySelector('#order').addEventListener('click', (e) => {
   //prevent display of the default invalid input's message
   e.preventDefault();
 
+  //Run trought inputs of the form, and check their validity
   for (let input of document.querySelectorAll('form input')) {
     switch(input.id) {
 

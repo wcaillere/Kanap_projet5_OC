@@ -147,6 +147,24 @@ function displayCart () {
 
 displayCart();
 
+function checkEmptyInput(input, errorMessage) {
+  if (input.value.trim().length != 0) {
+    input.nextElementSibling.textContent = '';
+    return true
+  } else {
+    input.nextElementSibling.textContent = errorMessage;
+    return false
+  };
+}
+
+function checkNumber(input, errorMessage) {
+  if (/[0-9]+/.test(input.value)) {
+    input.nextElementSibling.textContent = errorMessage;
+  } else {
+    input.nextElementSibling.textContent = '';
+  };
+}
+
 document.querySelector('#order').addEventListener('click', (e) => {
   //prevent display of the default invalid input's message
   e.preventDefault();
@@ -155,50 +173,28 @@ document.querySelector('#order').addEventListener('click', (e) => {
     switch(input.id) {
 
       case 'firstName':
-        if (input.checkValidity()) {
-          input.nextElementSibling.textContent = '';
-          if (/[0-9]+/.test(input.value)) {
-            input.nextElementSibling.textContent = 'Veuillez renseigner un prénom valide (sans chiffres)';
-          } else {
-            input.nextElementSibling.textContent = '';
-          }
-        } else {
-          input.nextElementSibling.textContent = 'Veuillez renseigner votre prénom';
-        };
+        let validFirstName  = checkEmptyInput(input, 'Veuillez renseigner votre prénom');
+        if (validFirstName) {
+          checkNumber(input, 'Veuillez renseigner un prénom valide (sans chiffres)');
+        }
         break
 
       case 'lastName':
-        if (input.checkValidity()) {
-          input.nextElementSibling.textContent = '';
-          if (/[0-9]+/.test(input.value)) {
-            input.nextElementSibling.textContent = 'Veuillez renseigner un nom valide (sans chiffres)';
-          } else {
-            input.nextElementSibling.textContent = '';
-          }
-        } else {
-          input.nextElementSibling.textContent = 'Veuillez renseigner votre nom';
-        };
+        let validLastName  = checkEmptyInput(input, 'Veuillez renseigner votre nom');
+        if (validLastName) {
+          checkNumber(input, 'Veuillez renseigner un nom valide (sans chiffres)');
+        }
         break
 
       case 'address':
-        if (input.checkValidity()) {
-          input.nextElementSibling.textContent = '';
-        } else {
-          input.nextElementSibling.textContent = 'Veuillez renseigner votre adresse';
-        };
+        checkEmptyInput(input, 'Veuillez renseigner votre adresse');
         break
 
       case 'city':
-        if (input.checkValidity()) {
-          input.nextElementSibling.textContent = '';
-          if (/[0-9]+/.test(input.value)) {
-            input.nextElementSibling.textContent = 'Veuillez renseigner une ville valide (sans chiffres)';
-          } else {
-            input.nextElementSibling.textContent = '';
-          }
-        } else {
-          input.nextElementSibling.textContent = 'Veuillez renseigner votre ville';
-        };
+        let validCity  = checkEmptyInput(input, 'Veuillez renseigner votre ville');
+        if (validCity) {
+          checkNumber(input, 'Veuillez renseigner un nom de ville valide (sans chiffres)');
+        }
         break
 
       case 'email':

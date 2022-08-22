@@ -221,3 +221,10 @@ document.querySelector('#order').addEventListener('click', (e) => {
     }
   }
 })
+
+let contact = {};
+for (let input of document.querySelectorAll('form input[type=text], input[type=email]')) {
+  contact[input.id] = input.value;
+}
+
+console.log(contact);

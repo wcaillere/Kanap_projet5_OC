@@ -222,6 +222,7 @@ document.querySelector('#order').addEventListener('click', (e) => {
   }
 })
 
+//Creation of the object contact for the POST request
 let contact = {};
 for (let input of document.querySelectorAll('form input[type=text], input[type=email]')) {
   contact[input.id] = input.value;

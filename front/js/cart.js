@@ -150,9 +150,15 @@ displayCart();
 document.querySelector('#order').addEventListener('click', (e) => {
   //prevent display of the default invalid input's message
   e.preventDefault();
+
   for (let input of document.querySelectorAll('form input[type=text]')) {
     if (input.checkValidity()) {
       input.nextElementSibling.textContent = '';
+      if (/[0-9]+/.test(input.value)) {
+        input.nextElementSibling.textContent = 'Veuillez renseigner une valeur valide';
+      } else {
+        input.nextElementSibling.textContent = '';
+      }
     } else {
       input.nextElementSibling.textContent = 'Veuillez remplir ce champ';
     }

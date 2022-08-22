@@ -145,23 +145,79 @@ function displayCart () {
   getTotalPrice();
 };
 
+/**
+ * Check if an input is empty or not for the POST of the form
+ * @param {HTMLElement} input 
+ * @param {string} errorMessage Allow to personalize the error message
+ * @returns true if the input is valid (not empty)
+ */
+function checkEmptyInput(input, errorMessage) {
+  //Using the property 'trim' takes into account string containing only spaces
+  if (input.value.trim().length != 0) {
+    input.nextElementSibling.textContent = '';
+    return true
+  } else {
+    input.nextElementSibling.textContent = errorMessage;
+    return false
+  };
+}
+
+/**
+ * Check if an input has number or not in it for the POST of the form
+ * @param {HTMLElement} input 
+ * @param {string} errorMessage Allow to personalize the error message
+ */
+function checkNumber(input, errorMessage) {
+  if (/[0-9]+/.test(input.value)) {
+    input.nextElementSibling.textContent = errorMessage;
+  } else {
+    input.nextElementSibling.textContent = '';
+  };
+}
+
+//Display the cart on the html page on its load
 displayCart();
 
 document.querySelector('#order').addEventListener('click', (e) => {
   //prevent display of the default invalid input's message
   e.preventDefault();
-  for (let input of document.querySelectorAll('form input[type=text]')) {
-    if (input.checkValidity()) {
-      input.nextElementSibling.textContent = '';
-    } else {
-      input.nextElementSibling.textContent = 'Veuillez remplir ce champ';
-    }
-  }
 
-  let email = document.querySelector('form input[type=email]')
-  if (email.checkValidity()) {
-    email.nextElementSibling.textContent = '';
-  } else {
-    email.nextElementSibling.textContent = 'Veuillez renseignez une adresse mail valide';
+  //Run trought inputs of the form, and check their validity
+  for (let input of document.querySelectorAll('form input')) {
+    switch(input.id) {
+
+      case 'firstName':
+        let validFirstName  = checkEmptyInput(input, 'Veuillez renseigner votre prénom');
+        if (validFirstName) {
+          checkNumber(input, 'Veuillez renseigner un prénom valide (sans chiffres)');
+        }
+        break
+
+      case 'lastName':
+        let validLastName  = checkEmptyInput(input, 'Veuillez renseigner votre nom');
+        if (validLastName) {
+          checkNumber(input, 'Veuillez renseigner un nom valide (sans chiffres)');
+        }
+        break
+
+      case 'address':
+        checkEmptyInput(input, 'Veuillez renseigner votre adresse');
+        break
+
+      case 'city':
+        let validCity  = checkEmptyInput(input, 'Veuillez renseigner votre ville');
+        if (validCity) {
+          checkNumber(input, 'Veuillez renseigner un nom de ville valide (sans chiffres)');
+        }
+        break
+
+      case 'email':
+        if (input.checkValidity()) {
+          input.nextElementSibling.textContent = '';
+        } else {
+          input.nextElementSibling.textContent = 'Veuillez renseigner une adresse mail valide';
+        };
+        break
+    }
   }
 })

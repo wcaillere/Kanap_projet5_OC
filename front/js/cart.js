@@ -170,8 +170,10 @@ function checkEmptyInput(input, errorMessage) {
 function checkNumber(input, errorMessage) {
   if (/[0-9]+/.test(input.value)) {
     input.nextElementSibling.textContent = errorMessage;
+    return false
   } else {
     input.nextElementSibling.textContent = '';
+    return true
   };
 }
 
@@ -181,6 +183,7 @@ displayCart();
 document.querySelector('#order').addEventListener('click', (e) => {
   //prevent display of the default invalid input's message
   e.preventDefault();
+  var validForm = true;
 
   //Run trought inputs of the form, and check their validity
   for (let input of document.querySelectorAll('form input')) {
@@ -189,71 +192,84 @@ document.querySelector('#order').addEventListener('click', (e) => {
       case 'firstName':
         let validFirstName  = checkEmptyInput(input, 'Veuillez renseigner votre prénom');
         if (validFirstName) {
-          checkNumber(input, 'Veuillez renseigner un prénom valide (sans chiffres)');
+          validFirstName = checkNumber(input, 'Veuillez renseigner un prénom valide (sans chiffres)');
+          validForm &= validFirstName;
         }
         break
 
       case 'lastName':
         let validLastName  = checkEmptyInput(input, 'Veuillez renseigner votre nom');
         if (validLastName) {
-          checkNumber(input, 'Veuillez renseigner un nom valide (sans chiffres)');
+          validLastName = checkNumber(input, 'Veuillez renseigner un nom valide (sans chiffres)');
+          validForm &= validLastName;
         }
         break
 
       case 'address':
-        checkEmptyInput(input, 'Veuillez renseigner votre adresse');
+        let validAddress = checkEmptyInput(input, 'Veuillez renseigner votre adresse');
+        validForm &= validAddress
         break
 
       case 'city':
         let validCity  = checkEmptyInput(input, 'Veuillez renseigner votre ville');
         if (validCity) {
-          checkNumber(input, 'Veuillez renseigner un nom de ville valide (sans chiffres)');
+          validCity = checkNumber(input, 'Veuillez renseigner un nom de ville valide (sans chiffres)');
+          validForm &= validCity;
         }
         break
 
       case 'email':
         if (input.checkValidity()) {
           input.nextElementSibling.textContent = '';
+          validForm &= true;
         } else {
           input.nextElementSibling.textContent = 'Veuillez renseigner une adresse mail valide';
-        };
+          validForm &= false;
+        }
         break
     }
   }
-})
 
-//Creation of the object 'contact' for the POST request
-let contact = {};
-for (let input of document.querySelectorAll('form input[type=text], input[type=email]')) {
-  contact[input.id] = input.value;
-}
+  console.log(validForm);
+  if (validForm) {
+    alert('votre commande a bien été effectuée');
+    
+    //Creation of the object 'contact' for the POST request
+    let contact = {};
+    for (let input of document.querySelectorAll('form input[type=text], input[type=email]')) {
+      contact[input.id] = input.value;
+      };
 
-//Creation of the Array 'products' for the POST request
-let cart = getCart();
-let products = []
-for (let item of cart) {
-  if (item.id in products) {
-    //rien
-  } else {
-    products.push(item.id)
+    //Creation of the Array 'products' for the POST request
+    let cart = getCart();
+    let products = []
+    for (let item of cart) {
+      if (item.id in products) {
+        //rien
+      } else {
+        products.push(item.id)
+      }
+    }
+    
+    fetch('http://localhost:3000/api/products/order', {
+      method: "POST",
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        'contact': contact,
+        'products': products})
+    }) 
+    .then(function(data) {
+      if (data.ok) {
+        return data.json()
+      }
+    })
+    .then(function(value) {
+      console.log(value)
+    })
   }
-}
+})
 
-fetch('http://localhost:3000/api/products/order', {
-  method: "POST",
-  headers: {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify({
-    'contact': contact,
-    'products': products})
-}) 
-.then(function(data) {
-  if (data.ok) {
-    return data.json()
-  }
-})
-.then(function(value) {
-  console.log(value)
-})
+

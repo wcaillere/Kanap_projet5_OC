@@ -266,8 +266,8 @@ document.querySelector('#order').addEventListener('click', (e) => {
         return data.json()
       }
     })
-    .then(function(value) {
-      console.log(value)
+    .then(function(order) {
+      location.href = `./confirmation.html?orderId=${order.orderId}`
     })
   }
 })

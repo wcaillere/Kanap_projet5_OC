@@ -93,7 +93,7 @@ function changeQuantity(element) {
  * Display the cart on the cart page
  */
 function displayCart () {
-  let cartList = JSON.parse(localStorage.getItem('cart'));
+  let cartList = getCart();
   for (let item of cartList) {
       fetch(`http://localhost:3000/api/products/${item.id}`)
       .then(function(data) {
@@ -284,6 +284,7 @@ document.querySelector('#order').addEventListener('click', (e) => {
         }
       })
       .then(function(order) {
+        localStorage.removeItem('cart');
         location.href = `./confirmation.html?orderId=${order.orderId}`
       })
     }

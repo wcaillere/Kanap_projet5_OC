@@ -233,8 +233,8 @@ document.querySelector('#order').addEventListener('click', (e) => {
 
   if (validForm) {
     let cart = getCart();
-    if (cart = []) {
-      alert('votre panier est vide')
+    if (cart.length == 0) {
+      alert('votre panier est vide');
     } else {
       alert('votre commande a bien été effectuée');
     

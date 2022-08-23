@@ -1,6 +1,6 @@
 const url = "http://localhost:3000/api/products";
 
-//show products on the page via API request
+//display products on the homepage via API request
 fetch(url)
     .then(function(data) {
         if (data.ok) {
@@ -8,7 +8,6 @@ fetch(url)
         }
     })
     .then(function(productList) {
-        console.log(productList);
         for (let product of productList) {
             document.querySelector('#items').innerHTML += `<a href="./product.html?id=${product._id}">
             <article>

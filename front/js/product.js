@@ -1,27 +1,6 @@
 //get product's id after visitor comes from the homepage
 let url = new URL(window.location.href);
-var id = url.searchParams.get('id');
-
-//show product on the page via API request
-fetch(`http://localhost:3000/api/products/${id}`)
-    .then(function(data) {
-        if (data.ok) {
-            return data.json();
-        }
-    })
-    .then(function(product) {
-        console.log(product);
-        document.querySelector('.item__img').innerHTML = `<img src=${product.imageUrl} alt=${product.altTxt}>`;
-        document.querySelector('#title').textContent = product.name;
-        document.querySelector('#price').textContent = product.price;
-        document.querySelector('#description').textContent = product.description;
-        for (let color of product.colors) {
-            document.querySelector('#colors').innerHTML += `<option value=${color.toLowerCase()}>${color.toLowerCase()}</option>`;
-        }
-    })
-    .catch(function(err) {
-        console.log(err);
-    });
+let id = url.searchParams.get('id');
 
 /**
  * Save the new cart in the localStorage
@@ -50,9 +29,10 @@ function getCart() {
 function addCart() {
     let color = document.querySelector('#colors').value;
     let quantity = Number(document.querySelector('#quantity').value);
-    if (color && quantity > 0) {
+    if (color && (quantity > 0 && quantity < 101)) {
         let command = {"id": id, "color": color, "quantity": quantity};
         let cart = getCart();
+        //Search if the command is already in the cart (same id and color)
         let foundProduct = cart.find(product => product.id == command.id && product.color == command.color);
         if (foundProduct != undefined) {
             foundProduct.quantity += command.quantity;
@@ -62,8 +42,28 @@ function addCart() {
         saveCart(cart);
         alert("Votre produit a bien été ajouté à votre panier !")
     } else {
-        alert("Veuillez sélectionner une couleur valide ainsi qu'une quantité supérieure à 0.")
+        alert("Veuillez sélectionner une couleur valide ainsi qu'une quantité comprise entre 0 et 100.")
     }
 };
 
-document.querySelector('#addToCart').addEventListener('click', addCart);
+//display product on the page via API request and add the eventListener on the button 'Ajout au panier'
+fetch(`http://localhost:3000/api/products/${id}`)
+    .then(function(data) {
+        if (data.ok) {
+            return data.json();
+        }
+    })
+    .then(function(product) {
+        document.querySelector('.item__img').innerHTML = `<img src=${product.imageUrl} alt=${product.altTxt}>`;
+        document.querySelector('#title').textContent = product.name;
+        document.querySelector('#price').textContent = product.price;
+        document.querySelector('#description').textContent = product.description;
+        for (let color of product.colors) {
+            document.querySelector('#colors').innerHTML += `<option value=${color.toLowerCase()}>${color.toLowerCase()}</option>`;
+        };
+        document.querySelector('#addToCart').addEventListener('click', addCart);
+    })
+    .catch(function(err) {
+        console.log(err);
+    });
+

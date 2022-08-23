@@ -178,6 +178,34 @@ function checkNumber(input, errorMessage) {
   };
 }
 
+/**
+ * Creation of a object 'contact', used for the POST request. Contains informations on the client : firstName, lastName, address, city, email
+ * @returns an object 'contact'
+ */
+function createContact() {
+  let contact = {};
+  for (let input of document.querySelectorAll('form input[type=text], input[type=email]')) {
+    contact[input.id] = input.value;
+    };
+  return contact
+}
+
+/**
+ * Creation of an array 'products', used for the POST request. Contains the id(s) of the cart's products
+ * @returns an array 'products'
+ */
+function createProducts() {
+  let cart = getCart();
+  let products = []
+  for (let item of cart) {
+    if (!(item.id in products)) {
+      products.push(item.id)
+    }
+  }
+  return products
+}
+
+
 //Display the cart on the html page on its load
 displayCart();
 
@@ -237,23 +265,9 @@ document.querySelector('#order').addEventListener('click', (e) => {
       alert('votre panier est vide');
     } else {
       alert('votre commande a bien été effectuée');
-    
-      //Creation of the object 'contact' for the POST request
-      let contact = {};
-      for (let input of document.querySelectorAll('form input[type=text], input[type=email]')) {
-        contact[input.id] = input.value;
-        };
+      contact = createContact();
+      products = createProducts();
 
-      //Creation of the Array 'products' for the POST request
-      let products = []
-      for (let item of cart) {
-        if (item.id in products) {
-          //rien
-        } else {
-          products.push(item.id)
-        }
-      }
-      
       fetch('http://localhost:3000/api/products/order', {
         method: "POST",
         headers: {

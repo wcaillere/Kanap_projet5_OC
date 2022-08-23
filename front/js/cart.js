@@ -20,7 +20,7 @@ function getCart() {
 }
 
 /**
- * Get the total quantity of products in the cart
+ * Get the total quantity of products in the cart and display it on page
  */
 function getTotalQuantity() {
   let cart = getCart();
@@ -32,7 +32,7 @@ function getTotalQuantity() {
 }
 
 /**
- * Get the total price of the cart (price of each product asked via API, this information is not in the cart)
+ * Get the total price of the cart (price of each product asked via API, this information is not in the cart) and display it on page
  */
 function getTotalPrice() {
   let cart = getCart();
@@ -62,6 +62,7 @@ function getTotalPrice() {
 function removeFromCart(element) {
   let productToRemove = element.target.closest('.cart__item')
   let cart = getCart()
+  //keep in cart products which have a different id of color than the product to remove
   cart = cart.filter(p => p.id != productToRemove.dataset.id || p.color != productToRemove.dataset.color);
   saveCart(cart);
   productToRemove.remove();
@@ -102,6 +103,7 @@ function displayCart () {
           }
       })
       .then(function(product) {
+        //display a product on the cart page
         document.querySelector('#cart__items').innerHTML += `<article class="cart__item" data-id="${item.id}" data-color="${item.color}">
           <div class="cart__item__img">
             <img src="${product.imageUrl}" alt="${product.altTxt}">
@@ -123,14 +125,14 @@ function displayCart () {
             </div>
           </div>
         </article>`
-
+        //add the possibility to remove a product by clicking on his button 'supprimer'
         removeBtn = document.querySelectorAll('.deleteItem');
         for (let element of removeBtn) {
           element.addEventListener('click', (e) => {
           removeFromCart(e);
           })
         }
-
+        //add the possibility to change the quantity of a product by changing his input 'Qté'
         productsQuantities = document.querySelectorAll('.itemQuantity');
         for (let productQuantity of productsQuantities) {
           productQuantity.addEventListener('change', (e) => {
@@ -149,8 +151,8 @@ function displayCart () {
 /**
  * Check if an input is empty or not for the POST of the form
  * @param {HTMLElement} input 
- * @param {string} errorMessage Allow to personalize the error message
- * @returns true if the input is valid (not empty)
+ * @param {string} errorMessage Allows to personalize the error message
+ * @returns {boolean} true if the input is valid (not empty)
  */
 function checkEmptyInput(input, errorMessage) {
   //Using the property 'trim' takes into account string containing only spaces
@@ -166,7 +168,8 @@ function checkEmptyInput(input, errorMessage) {
 /**
  * Check if an input has number or not in it for the POST of the form
  * @param {HTMLElement} input 
- * @param {string} errorMessage Allow to personalize the error message
+ * @param {string} errorMessage Allows to personalize the error message
+ * @returns {boolean} true if the input is valid (no number in it)
  */
 function checkNumber(input, errorMessage) {
   if (/[0-9]+/.test(input.value)) {
@@ -180,7 +183,7 @@ function checkNumber(input, errorMessage) {
 
 /**
  * Creation of a object 'contact', used for the POST request. Contains informations on the client : firstName, lastName, address, city, email
- * @returns an object 'contact'
+ * @returns {object}
  */
 function createContact() {
   let contact = {};
@@ -192,7 +195,7 @@ function createContact() {
 
 /**
  * Creation of an array 'products', used for the POST request. Contains the id(s) of the cart's products
- * @returns an array 'products'
+ * @returns {array}
  */
 function createProducts() {
   let cart = getCart();
@@ -209,12 +212,13 @@ function createProducts() {
 //Display the cart on the html page on its load
 displayCart();
 
+//Verify all inputs when the button 'commander !' is clicked
 document.querySelector('#order').addEventListener('click', (e) => {
   //prevent display of the default invalid input's message
   e.preventDefault();
   var validForm = true;
 
-  //Run trought inputs of the form, and check their validity
+  //Run trought inputs of the form, and check their validity (switch/case allows to personalize the validity check of all input)
   for (let input of document.querySelectorAll('form input')) {
     switch(input.id) {
 
@@ -259,6 +263,7 @@ document.querySelector('#order').addEventListener('click', (e) => {
     }
   }
 
+  //if validForm is true, it means that all previous inputs were valid
   if (validForm) {
     let cart = getCart();
     if (cart.length == 0) {
@@ -286,6 +291,9 @@ document.querySelector('#order').addEventListener('click', (e) => {
       .then(function(order) {
         localStorage.removeItem('cart');
         location.href = `./confirmation.html?orderId=${order.orderId}`
+      })
+      .catch(function(err) {
+        console.log(err);
       })
     }
   }

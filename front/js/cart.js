@@ -37,6 +37,7 @@ function getTotalQuantity() {
 function getTotalPrice() {
   let cart = getCart();
   let totalPrice = 0;
+  document.querySelector('#totalPrice').textContent = totalPrice;
   for (let item of cart) {
     fetch(`http://localhost:3000/api/products/${item.id}`)
     .then(function(data) {

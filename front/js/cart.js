@@ -230,45 +230,48 @@ document.querySelector('#order').addEventListener('click', (e) => {
     }
   }
 
-  console.log(validForm);
   if (validForm) {
-    alert('votre commande a bien été effectuée');
-    
-    //Creation of the object 'contact' for the POST request
-    let contact = {};
-    for (let input of document.querySelectorAll('form input[type=text], input[type=email]')) {
-      contact[input.id] = input.value;
-      };
-
-    //Creation of the Array 'products' for the POST request
     let cart = getCart();
-    let products = []
-    for (let item of cart) {
-      if (item.id in products) {
-        //rien
-      } else {
-        products.push(item.id)
-      }
-    }
+    if (cart = []) {
+      alert('votre panier est vide')
+    } else {
+      alert('votre commande a bien été effectuée');
     
-    fetch('http://localhost:3000/api/products/order', {
-      method: "POST",
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        'contact': contact,
-        'products': products})
-    }) 
-    .then(function(data) {
-      if (data.ok) {
-        return data.json()
+      //Creation of the object 'contact' for the POST request
+      let contact = {};
+      for (let input of document.querySelectorAll('form input[type=text], input[type=email]')) {
+        contact[input.id] = input.value;
+        };
+
+      //Creation of the Array 'products' for the POST request
+      let products = []
+      for (let item of cart) {
+        if (item.id in products) {
+          //rien
+        } else {
+          products.push(item.id)
+        }
       }
-    })
-    .then(function(order) {
-      location.href = `./confirmation.html?orderId=${order.orderId}`
-    })
+      
+      fetch('http://localhost:3000/api/products/order', {
+        method: "POST",
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          'contact': contact,
+          'products': products})
+      }) 
+      .then(function(data) {
+        if (data.ok) {
+          return data.json()
+        }
+      })
+      .then(function(order) {
+        location.href = `./confirmation.html?orderId=${order.orderId}`
+      })
+    }
   }
 })
 

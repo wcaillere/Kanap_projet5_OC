@@ -95,7 +95,7 @@ function changeQuantity(element) {
  */
 async function displayCart () {
   let cartList = getCart();
-  cartList.sort((a, b) => parseInt(a.id) - parseInt(b.id));
+  cartList.sort((a, b) => a.id.localeCompare(b.id));
   for (let item of cartList) {
     console.log(item);
     await fetch(`http://localhost:3000/api/products/${item.id}`)

@@ -93,18 +93,20 @@ function changeQuantity(element) {
 /**
  * Display the cart on the cart page
  */
-function displayCart () {
+async function displayCart () {
   let cartList = getCart();
+  cartList.sort((a, b) => parseInt(a.id) - parseInt(b.id));
   for (let item of cartList) {
-      fetch(`http://localhost:3000/api/products/${item.id}`)
-      .then(function(data) {
-          if (data.ok) {
-              return data.json();
-          }
-      })
-      .then(function(product) {
-        //display a product on the cart page
-        document.querySelector('#cart__items').innerHTML += `<article class="cart__item" data-id="${item.id}" data-color="${item.color}">
+    console.log(item);
+    await fetch(`http://localhost:3000/api/products/${item.id}`)
+    .then(function(data) {
+      if (data.ok) {
+        return data.json();
+      }
+    })
+    .then(function(product) {
+      //display a product on the cart page
+      document.querySelector('#cart__items').innerHTML += `<article class="cart__item" data-id="${item.id}" data-color="${item.color}">
           <div class="cart__item__img">
             <img src="${product.imageUrl}" alt="${product.altTxt}">
           </div>
@@ -125,24 +127,24 @@ function displayCart () {
             </div>
           </div>
         </article>`
-        //add the possibility to remove a product by clicking on his button 'supprimer'
-        removeBtn = document.querySelectorAll('.deleteItem');
-        for (let element of removeBtn) {
-          element.addEventListener('click', (e) => {
-          removeFromCart(e);
-          })
-        }
-        //add the possibility to change the quantity of a product by changing his input 'Qté'
-        productsQuantities = document.querySelectorAll('.itemQuantity');
-        for (let productQuantity of productsQuantities) {
-          productQuantity.addEventListener('change', (e) => {
-            changeQuantity(e);
-          })
-        }
-      })
-      .catch(function(err) {
-          console.log(err);
-      }); 
+      //add the possibility to remove a product by clicking on his button 'supprimer'
+      removeBtn = document.querySelectorAll('.deleteItem');
+      for (let element of removeBtn) {
+        element.addEventListener('click', (e) => {
+        removeFromCart(e);
+        })
+      }
+      //add the possibility to change the quantity of a product by changing his input 'Qté'
+      productsQuantities = document.querySelectorAll('.itemQuantity');
+      for (let productQuantity of productsQuantities) {
+        productQuantity.addEventListener('change', (e) => {
+        changeQuantity(e);
+        })
+      }
+    })
+    .catch(function(err) {
+      console.log(err);
+    }); 
   }
   getTotalQuantity();
   getTotalPrice();

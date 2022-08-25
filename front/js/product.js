@@ -35,13 +35,19 @@ function addCart() {
         //Search if the command is already in the cart (same id and color)
         let foundProduct = cart.find(product => product.id == command.id && product.color == command.color);
         if (foundProduct != undefined) {
-            foundProduct.quantity += command.quantity;
+            if (foundProduct.quantity + command.quantity > 100) {
+                alert("Action refusée : ce produit est déjà dans votre panier, et ajouter cette quantité le ferait passer au-dessus des 100 exemplaires maximaux. veuillez réduire votre quantité")
+            } else {
+                foundProduct.quantity += command.quantity;
+                alert("Ce produit étant déjà dans votre panier, sa nouvelle quantité a bien été ajoutée")
+            }
         } else {
             cart.push(command);
+            alert("Votre produit a bien été ajouté à votre panier !")
         }
         saveCart(cart);
-        alert("Votre produit a bien été ajouté à votre panier !")
-    } else if (color && (quantity < 0 || quantity >= 101)) {
+        
+    } else if (color && (quantity <= 0 || quantity >= 101)) {
         alert("Veuillez renseigner une quantité comprise entre 1 et 100.")
     } else if (!color && (quantity > 0 && quantity < 101)) {
         alert("Veuillez sélectionner une couleur")

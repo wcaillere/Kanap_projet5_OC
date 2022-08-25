@@ -41,8 +41,12 @@ function addCart() {
         }
         saveCart(cart);
         alert("Votre produit a bien été ajouté à votre panier !")
+    } else if (color && (quantity < 0 || quantity >= 101)) {
+        alert("Veuillez renseigner une quantité comprise entre 1 et 100.")
+    } else if (!color && (quantity > 0 && quantity < 101)) {
+        alert("Veuillez sélectionner une couleur")
     } else {
-        alert("Veuillez sélectionner une couleur valide ainsi qu'une quantité comprise entre 0 et 100.")
+        alert("Veuillez sélectionner une couleur et renseigner une quantité comprise entre 1 et 100.")
     }
 };
 

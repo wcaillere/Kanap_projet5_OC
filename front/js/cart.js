@@ -97,7 +97,6 @@ async function displayCart () {
   let cartList = getCart();
   cartList.sort((a, b) => a.id.localeCompare(b.id));
   for (let item of cartList) {
-    console.log(item);
     await fetch(`http://localhost:3000/api/products/${item.id}`)
     .then(function(data) {
       if (data.ok) {

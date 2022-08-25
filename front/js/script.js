@@ -1,7 +1,7 @@
-const url = "http://localhost:3000/api/products";
+const apiUrl = "http://localhost:3000/api/products";
 
 //display products on the homepage via API request
-fetch(url)
+fetch(apiUrl)
     .then(function(data) {
         if (data.ok) {
             return data.json();

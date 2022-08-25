@@ -78,7 +78,8 @@ function changeQuantity(element) {
   let newQuantity = Number(element.target.value);
   let cart = getCart();
   let productToChange = element.target.closest('.cart__item');
-  findProduct = cart.find(p => p.id == productToChange.dataset.id || p.color == productToChange.dataset.color);
+  //Search in the cart the product to change
+  findProduct = cart.find(p => p.id == productToChange.dataset.id && p.color == productToChange.dataset.color);
   if (newQuantity > 0 && newQuantity < 101) {
     findProduct.quantity = newQuantity;
     saveCart(cart);
@@ -94,6 +95,7 @@ function changeQuantity(element) {
  * Display the cart on the cart page
  */
 async function displayCart () {
+  //Sort the cart to display products by ID and colors
   let cartList = getCart();
   cartList.sort((a, b) => a.id.localeCompare(b.id));
   for (let item of cartList) {
@@ -227,7 +229,7 @@ document.querySelector('#order').addEventListener('click', (e) => {
           validFirstName = checkNumber(input, 'Veuillez renseigner un prénom valide (sans chiffres)');
           validForm &= validFirstName;
         }
-        break
+        break;
 
       case 'lastName':
         let validLastName  = checkEmptyInput(input, 'Veuillez renseigner votre nom');
@@ -235,12 +237,12 @@ document.querySelector('#order').addEventListener('click', (e) => {
           validLastName = checkNumber(input, 'Veuillez renseigner un nom valide (sans chiffres)');
           validForm &= validLastName;
         }
-        break
+        break;
 
       case 'address':
         let validAddress = checkEmptyInput(input, 'Veuillez renseigner votre adresse');
         validForm &= validAddress
-        break
+        break;
 
       case 'city':
         let validCity  = checkEmptyInput(input, 'Veuillez renseigner votre ville');
@@ -248,7 +250,7 @@ document.querySelector('#order').addEventListener('click', (e) => {
           validCity = checkNumber(input, 'Veuillez renseigner un nom de ville valide (sans chiffres)');
           validForm &= validCity;
         }
-        break
+        break;
 
       case 'email':
         if (input.checkValidity()) {
@@ -258,7 +260,7 @@ document.querySelector('#order').addEventListener('click', (e) => {
           input.nextElementSibling.textContent = 'Veuillez renseigner une adresse mail valide';
           validForm &= false;
         }
-        break
+        break;
     }
   }
 

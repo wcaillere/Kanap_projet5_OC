@@ -202,9 +202,7 @@ function createProducts() {
   let cart = getCart();
   let products = []
   for (let item of cart) {
-    if (!(item.id in products)) {
-      products.push(item.id)
-    }
+    products.push(item.id)
   }
   return products
 }
@@ -290,6 +288,7 @@ document.querySelector('#order').addEventListener('click', (e) => {
         }
       })
       .then(function(order) {
+        //LocalStorage is cleaned after the command
         localStorage.removeItem('cart');
         location.href = `./confirmation.html?orderId=${order.orderId}`
       })

@@ -56,24 +56,40 @@ function addCart() {
     }
 };
 
-//display product on the page via API request and add the eventListener on the button 'Ajout au panier'
-fetch(`http://localhost:3000/api/products/${id}`)
+
+/**
+ * display product on the page via API request and add the eventListener on the button 'Ajout au panier'
+ */
+function displayProduct() {
+  fetch(`http://localhost:3000/api/products/${id}`)
     .then(function(data) {
         if (data.ok) {
             return data.json();
         }
     })
     .then(function(product) {
-        document.querySelector('.item__img').innerHTML = `<img src=${product.imageUrl} alt=${product.altTxt}>`;
+        //Creation of the <img>
+        productImage = document.createElement('img');
+        productImage.setAttribute('src', product.imageUrl);
+        productImage.setAttribute('alt', product.altTxt);
+        document.querySelector('.item__img').appendChild(productImage);
+        //Add the name, price and description
         document.querySelector('#title').textContent = product.name;
         document.querySelector('#price').textContent = product.price;
         document.querySelector('#description').textContent = product.description;
+        //Creation of the <option> for colors
         for (let color of product.colors) {
-            document.querySelector('#colors').innerHTML += `<option value=${color.toLowerCase()}>${color.toLowerCase()}</option>`;
+            productColor = document.createElement('option');
+            productColor.setAttribute('value', color.toLowerCase())
+            productColor.textContent = color.toLowerCase();
+            document.querySelector('#colors').appendChild(productColor);
         };
         document.querySelector('#addToCart').addEventListener('click', addCart);
     })
     .catch(function(err) {
         console.log(err);
-    });
+    });  
+}
 
+//display product's details on the page loading
+displayProduct();

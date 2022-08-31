@@ -60,14 +60,16 @@ function getTotalPrice() {
  * @param {HTMLElement} element 
  */
 function removeFromCart(element) {
-  let productToRemove = element.target.closest('.cart__item')
-  let cart = getCart()
-  //keep in cart products which have a different id of color than the product to remove
-  cart = cart.filter(p => p.id != productToRemove.dataset.id || p.color != productToRemove.dataset.color);
-  saveCart(cart);
-  productToRemove.remove();
-  getTotalPrice();
-  getTotalQuantity();
+  if (confirm("Voulez-vous supprimer ce produit de votre panier ?")) {
+    let productToRemove = element.target.closest('.cart__item')
+    let cart = getCart()
+    //keep in cart products which have a different id of color than the product to remove
+    cart = cart.filter(p => p.id != productToRemove.dataset.id || p.color != productToRemove.dataset.color);
+    saveCart(cart);
+    productToRemove.remove();
+    getTotalPrice();
+    getTotalQuantity();
+  }
 }
 
 /**
@@ -107,7 +109,11 @@ async function displayCart () {
     })
     .then(function(product) {
       //display a product on the cart page
-      document.querySelector('#cart__items').innerHTML += `<article class="cart__item" data-id="${item.id}" data-color="${item.color}">
+      cartProduct = document.createElement('article');
+      cartProduct.classList.add('cart__item');
+      cartProduct.setAttribute('data-id', item.id);
+      cartProduct.setAttribute('data-color', item.color);
+      cartProduct.innerHTML = `
           <div class="cart__item__img">
             <img src="${product.imageUrl}" alt="${product.altTxt}">
           </div>
@@ -126,24 +132,8 @@ async function displayCart () {
                 <p class="deleteItem">Supprimer</p>
               </div>
             </div>
-          </div>
-        </article>`
-      //add the possibility to remove a product by clicking on his button 'supprimer'
-      removeBtn = document.querySelectorAll('.deleteItem');
-      for (let element of removeBtn) {
-        element.addEventListener('click', (e) => {
-          if (confirm("Voulez-vous supprimer ce produit de votre panier ?")) {
-            removeFromCart(e);
-          }
-        })
-      }
-      //add the possibility to change the quantity of a product by changing his input 'Qté'
-      productsQuantities = document.querySelectorAll('.itemQuantity');
-      for (let productQuantity of productsQuantities) {
-        productQuantity.addEventListener('change', (e) => {
-        changeQuantity(e);
-        })
-      }
+          </div>`
+      document.querySelector('#cart__items').appendChild(cartProduct);
     })
     .catch(function(err) {
       console.log(err);
@@ -151,6 +141,20 @@ async function displayCart () {
   }
   getTotalQuantity();
   getTotalPrice();
+  //add the possibility to remove a product by clicking on his button 'supprimer'
+  removeBtn = document.querySelectorAll('.deleteItem');
+  for (let element of removeBtn) {
+    element.addEventListener('click', (e) => {
+    removeFromCart(e);
+    })
+  };  
+  //add the possibility to change the quantity of a product by changing his input 'Qté'
+  productsQuantities = document.querySelectorAll('.itemQuantity');
+  for (let productQuantity of productsQuantities) {
+    productQuantity.addEventListener('change', (e) => {
+    changeQuantity(e);
+    })
+  };
 };
 
 /**

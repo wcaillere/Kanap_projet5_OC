@@ -211,6 +211,36 @@ function createProducts() {
   return products
 }
 
+/**
+ * Send a Post request to the API to obtain the client's order's ID
+ * @param {object} contact 
+ * @param {Array} products 
+ */
+function sendRequest(contact, products) {
+  fetch('http://localhost:3000/api/products/order', {
+    method: "POST",
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      'contact': contact,
+      'products': products})
+  }) 
+  .then(function(data) {
+    if (data.ok) {
+      return data.json()
+    }
+  })
+  .then(function(order) {
+    //LocalStorage is cleaned after the command
+    localStorage.removeItem('cart');
+    location.href = `./confirmation.html?orderId=${order.orderId}`
+  })
+  .catch(function(err) {
+    console.log(err);
+  })
+}
 
 //Display the cart on the html page on its load
 displayCart();
@@ -275,30 +305,7 @@ document.querySelector('#order').addEventListener('click', (e) => {
       alert('votre commande a bien été effectuée');
       contact = createContact();
       products = createProducts();
-
-      fetch('http://localhost:3000/api/products/order', {
-        method: "POST",
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          'contact': contact,
-          'products': products})
-      }) 
-      .then(function(data) {
-        if (data.ok) {
-          return data.json()
-        }
-      })
-      .then(function(order) {
-        //LocalStorage is cleaned after the command
-        localStorage.removeItem('cart');
-        location.href = `./confirmation.html?orderId=${order.orderId}`
-      })
-      .catch(function(err) {
-        console.log(err);
-      })
+      sendRequest();
     }
   }
 })

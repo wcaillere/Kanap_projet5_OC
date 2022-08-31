@@ -187,62 +187,6 @@ function checkNumber(input, errorMessage) {
 }
 
 /**
- * Creation of a object 'contact', used for the POST request. Contains informations on the client : firstName, lastName, address, city, email
- * @returns {object}
- */
-function createContact() {
-  let contact = {};
-  for (let input of document.querySelectorAll('form input[type=text], input[type=email]')) {
-    contact[input.id] = input.value;
-    };
-  return contact
-}
-
-/**
- * Creation of an array 'products', used for the POST request. Contains the id(s) of the cart's products
- * @returns {array}
- */
-function createProducts() {
-  let cart = getCart();
-  let products = []
-  for (let item of cart) {
-    products.push(item.id)
-  }
-  return products
-}
-
-/**
- * Send a Post request to the API to obtain the client's order's ID
- * @param {object} contact 
- * @param {Array} products 
- */
-function sendRequest(contact, products) {
-  fetch('http://localhost:3000/api/products/order', {
-    method: "POST",
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      'contact': contact,
-      'products': products})
-  }) 
-  .then(function(data) {
-    if (data.ok) {
-      return data.json()
-    }
-  })
-  .then(function(order) {
-    //LocalStorage is cleaned after the command
-    localStorage.removeItem('cart');
-    location.href = `./confirmation.html?orderId=${order.orderId}`
-  })
-  .catch(function(err) {
-    console.log(err);
-  })
-}
-
-/**
  * Check the validity of the form
  * @returns {boolean} true if the from is valid (all inputs are correct)
  */
@@ -293,6 +237,62 @@ function checkFormValidity() {
     }
   }
   return validForm;
+}
+
+/**
+* Creation of a object 'contact', used for the POST request. Contains informations on the client : firstName, lastName, address, city, email
+* @returns {object}
+*/
+function createContact() {
+  let contact = {};
+  for (let input of document.querySelectorAll('form input[type=text], input[type=email]')) {
+    contact[input.id] = input.value;
+    };
+  return contact
+}
+
+/**
+* Creation of an array 'products', used for the POST request. Contains the id(s) of the cart's products
+* @returns {array}
+*/
+function createProducts() {
+  let cart = getCart();
+  let products = []
+  for (let item of cart) {
+    products.push(item.id)
+  }
+  return products
+}
+
+/**
+ * Send a Post request to the API to obtain the client's order's ID
+ * @param {object} contact 
+ * @param {Array} products 
+ */
+ function sendRequest(contact, products) {
+  fetch('http://localhost:3000/api/products/order', {
+    method: "POST",
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      'contact': contact,
+      'products': products})
+  }) 
+  .then(function(data) {
+    if (data.ok) {
+      return data.json()
+    }
+  })
+  .then(function(order) {
+    //LocalStorage is cleaned after the command
+    localStorage.removeItem('cart');
+    location.href = `./confirmation.html?orderId=${order.orderId}`
+  })
+  .catch(function(err) {
+    console.log(err);
+  })
 }
 
 //Display the cart on the html page on its load

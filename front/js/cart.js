@@ -132,7 +132,9 @@ async function displayCart () {
       removeBtn = document.querySelectorAll('.deleteItem');
       for (let element of removeBtn) {
         element.addEventListener('click', (e) => {
-        removeFromCart(e);
+          if (confirm("Voulez-vous supprimer ce produit de votre panier ?")) {
+            removeFromCart(e);
+          }
         })
       }
       //add the possibility to change the quantity of a product by changing his input 'Qté'

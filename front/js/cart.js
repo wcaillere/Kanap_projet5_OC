@@ -242,15 +242,12 @@ function sendRequest(contact, products) {
   })
 }
 
-//Display the cart on the html page on its load
-displayCart();
-
-//Verify all inputs when the button 'commander !' is clicked
-document.querySelector('#order').addEventListener('click', (e) => {
-  //prevent display of the default invalid input's message
-  e.preventDefault();
-  var validForm = true;
-
+/**
+ * Check the validity of the form
+ * @returns {boolean} true if the from is valid (all inputs are correct)
+ */
+function checkFormValidity() {
+  let validForm = true;
   //Run trought inputs of the form, and check their validity (switch/case allows to personalize the validity check of all input)
   for (let input of document.querySelectorAll('form input')) {
     switch(input.id) {
@@ -295,9 +292,18 @@ document.querySelector('#order').addEventListener('click', (e) => {
         break;
     }
   }
+  return validForm;
+}
 
-  //if validForm is true, it means that all previous inputs were valid
-  if (validForm) {
+//Display the cart on the html page on its load
+displayCart();
+
+//Verify all inputs when the button 'commander !' is clicked
+document.querySelector('#order').addEventListener('click', (e) => {
+  //prevent display of the default invalid input's message
+  e.preventDefault();
+  //if checkFormValidity is true, it means that all inputs are valid
+  if (checkFormValidity()) {
     let cart = getCart();
     if (cart.length == 0) {
       alert('votre panier est vide');
@@ -305,7 +311,7 @@ document.querySelector('#order').addEventListener('click', (e) => {
       alert('votre commande a bien été effectuée');
       contact = createContact();
       products = createProducts();
-      sendRequest();
+      sendRequest(contact, products);
     }
   }
 })

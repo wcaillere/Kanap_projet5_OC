@@ -1,23 +1,4 @@
-/**
- * Save the new cart in the localStorage
- * @param {Array} cart 
- */
- function saveCart(cart) {
-  localStorage.setItem('cart', JSON.stringify(cart));
-}
-
-/**
-* Get the actual cart which was in the localStorage
-* @returns {Array}
-*/
-function getCart() {
-  let cart = localStorage.getItem('cart');
-  if (cart == null) {
-      return [];
-  } else {
-      return JSON.parse(cart);
-  }
-}
+import {getCart, saveCart} from "./product.js";
 
 /**
  * Get the total quantity of products in the cart and display it on page
@@ -81,7 +62,7 @@ function changeQuantity(element) {
   let cart = getCart();
   let productToChange = element.target.closest('.cart__item');
   //Search in the cart the product to change
-  findProduct = cart.find(p => p.id == productToChange.dataset.id && p.color == productToChange.dataset.color);
+  let findProduct = cart.find(p => p.id == productToChange.dataset.id && p.color == productToChange.dataset.color);
   if (newQuantity > 0 && newQuantity < 101) {
     findProduct.quantity = newQuantity;
     saveCart(cart);
@@ -109,7 +90,7 @@ async function displayCart () {
     })
     .then(function(product) {
       //display a product on the cart page
-      cartProduct = document.createElement('article');
+      let cartProduct = document.createElement('article');
       cartProduct.classList.add('cart__item');
       cartProduct.setAttribute('data-id', item.id);
       cartProduct.setAttribute('data-color', item.color);
@@ -142,14 +123,14 @@ async function displayCart () {
   getTotalQuantity();
   getTotalPrice();
   //add the possibility to remove a product by clicking on his button 'supprimer'
-  removeBtn = document.querySelectorAll('.deleteItem');
+  let removeBtn = document.querySelectorAll('.deleteItem');
   for (let element of removeBtn) {
     element.addEventListener('click', (e) => {
     removeFromCart(e);
     })
   };  
   //add the possibility to change the quantity of a product by changing his input 'Qté'
-  productsQuantities = document.querySelectorAll('.itemQuantity');
+  let productsQuantities = document.querySelectorAll('.itemQuantity');
   for (let productQuantity of productsQuantities) {
     productQuantity.addEventListener('change', (e) => {
     changeQuantity(e);
@@ -313,8 +294,8 @@ document.querySelector('#order').addEventListener('click', (e) => {
       alert('votre panier est vide');
     } else {
       alert('votre commande a bien été effectuée');
-      contact = createContact();
-      products = createProducts();
+      let contact = createContact();
+      let products = createProducts();
       sendRequest(contact, products);
     }
   }

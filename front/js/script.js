@@ -13,24 +13,24 @@ function displayProducts() {
     .then(function(productList) {
         for (let product of productList) {
             //Creation of the parent <a> link
-            sofaParent = document.createElement('a');
+            let sofaParent = document.createElement('a');
             sofaParent.setAttribute('href', `./product.html?id=${product._id}`)
             document.querySelector('#items').appendChild(sofaParent);
             //Creation of the parent <article>
-            sofaArticle = document.createElement('article');
+            let sofaArticle = document.createElement('article');
             sofaParent.appendChild(sofaArticle);
             //Creation of the <img>
-            sofaImage = document.createElement('img');
+            let sofaImage = document.createElement('img');
             sofaImage.setAttribute('src', product.imageUrl);
             sofaImage.setAttribute('alt', product.altTxt);
             sofaArticle.appendChild(sofaImage);
             //Creation of the <h3> for the name
-            sofaTitle = document.createElement('h3');
+            let sofaTitle = document.createElement('h3');
             sofaTitle.textContent = product.name;
             sofaTitle.classList.add('productName')
             sofaArticle.appendChild(sofaTitle);
             //Creation of the <p> for the description
-            sofaDescription = document.createElement('p');
+            let sofaDescription = document.createElement('p');
             sofaDescription.textContent = product.description;
             sofaDescription.classList.add('productDescription')
             sofaArticle.appendChild(sofaDescription);

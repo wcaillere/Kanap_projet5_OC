@@ -1,6 +1,6 @@
 //get product's id after visitor comes from the homepage
 let url = new URL(window.location.href);
-let id = url.searchParams.get('id');
+var id = url.searchParams.get('id');
 
 /**
  * Save the new cart in the localStorage
@@ -69,7 +69,7 @@ function displayProduct() {
     })
     .then(function(product) {
         //Creation of the <img>
-        productImage = document.createElement('img');
+        let productImage = document.createElement('img');
         productImage.setAttribute('src', product.imageUrl);
         productImage.setAttribute('alt', product.altTxt);
         document.querySelector('.item__img').appendChild(productImage);
@@ -79,7 +79,7 @@ function displayProduct() {
         document.querySelector('#description').textContent = product.description;
         //Creation of the <option> for colors
         for (let color of product.colors) {
-            productColor = document.createElement('option');
+            let productColor = document.createElement('option');
             productColor.setAttribute('value', color.toLowerCase())
             productColor.textContent = color.toLowerCase();
             document.querySelector('#colors').appendChild(productColor);
@@ -93,3 +93,5 @@ function displayProduct() {
 
 //display product's details on the page loading
 displayProduct();
+
+export {saveCart, getCart}

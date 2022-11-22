@@ -1,15 +1,11 @@
 # Kanap #
 
-This is the front end and back end server for Project 5 of the Web Developer path.
+Projet réalisé pour Kanap, une entreprise fictive de vente de canapé, qui souhaite avoir sa plateforme de e-commerce. La mise en place statique (avec HTML et CSS) et le backend ayant été déjà mis en place, l'objectif était d'intégrer les éléments dynamiquement grâce à JavaScript. 
 
 ### Back end Prerequisites ###
 
-You will need to have Node and `npm` installed locally on your machine.
+Node et `npm` doivent être installés localement sur votre ordinateur.
 
 ### Back end Installation ###
 
-Clone this repo. From the "back" folder of the project, run `npm install`. You 
-can then run the server with `node server`. 
-The server should run on `localhost` with default port `3000`. If the
-server runs on another port for any reason, this is printed to the
-console when the server starts, e.g. `Listening on port 3001`.
+Clonez le dosier. Depuis le fichier "back", lancer `npm install` dans un terminal. Vous pouvez ensuite lancer le serveur avec `node server`.
